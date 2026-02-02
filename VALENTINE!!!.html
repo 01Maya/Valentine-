@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Will you be my Valentine?</title>
+
+    <!-- Confetti library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --bg1: #ffd6e7;
+            --bg2: #ffeef6;
+            --card: #ffffffcc;
+            --yes: #ff3b7a;
+            --yesHover: #ff1f68;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100svh;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(circle at top, var(--bg2), var(--bg1));
+            font-family: system-ui, sans-serif;
+            overflow: hidden;
+            padding: 16px;
+        }
+
+        #confettiCanvas {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .card {
+            width: min(720px, 92vw);
+            padding: 30px 24px;
+            background: var(--card);
+            backdrop-filter: blur(14px);
+            border-radius: 26px;
+            text-align: center;
+            box-shadow: 0 30px 80px rgba(255, 59, 122, 0.25);
+            animation: cardPop 0.6s ease;
+        }
+
+        @keyframes cardPop {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            font-size: clamp(26px, 4vw, 44px);
+            font-weight: 800;
+            margin: 20px 0 26px;
+            color: #111;
+        }
+
+        /* ONLY NAME SHINES */
+        .shine {
+            font-weight: 900;
+            background: linear-gradient(90deg, #ff3b7a, #ff9ac2, #ff3b7a);
+            background-size: 200% auto;
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            animation: shine 2.5s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .button-zone {
+            position: relative;
+            width: min(520px, 92%);
+            height: 150px;
+            margin: 0 auto;
+            touch-action: none;
+        }
+
+        button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 16px 24px;
+            font-size: 18px;
+            font-weight: 800;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, .14);
+            transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+        }
+
+        #yesBtn {
+            left: 18%;
+            background: var(--yes);
+            color: #fff;
+        }
+
+        #yesBtn:hover {
+            background: var(--yesHover);
+            box-shadow: 0 0 30px rgba(255, 59, 122, 0.8);
+        }
+
+        #noBtn {
+            left: 62%;
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .hint {
+            margin-top: 10px;
+            font-size: 13px;
+            opacity: .7;
+        }
+
+        .result {
+            display: none;
+            margin-top: 20px;
+            animation: pop .35s ease;
+        }
+
+        .result h2 {
+            font-size: clamp(30px, 4.5vw, 46px);
+            margin-bottom: 10px;
+        }
+
+        .fireworks {
+            width: min(380px, 90vw);
+            border-radius: 16px;
+        }
+
+        @keyframes pop {
+            from {
+                transform: scale(.96);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="confettiCanvas"></canvas>
+
+    <main class="card">
+
+        <!-- ONLY NAME SHINES -->
+        <h1>
+            <span class="shine">HEY SWEETIEE!!!</span>, will you be my Valentine? 💘
+        </h1>
+
+        <section class="button-zone" id="zone">
+            <button id="yesBtn">Yes 💖</button>
+            <button id="noBtn">No 😈</button>
+        </section>
+
+        <div class="hint" id="hint">“No” is feeling shy today 😜</div>
+
+        <section class="result" id="result">
+            <h2>She said YES 🎉💍</h2>
+            <img class="fireworks" src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" alt="Celebration" />
+        </section>
+    </main>
+
+    <script>
+        const zone = document.getElementById("zone");
+        const yesBtn = document.getElementById("yesBtn");
+        const noBtn = document.getElementById("noBtn");
+        const result = document.getElementById("result");
+        const hint = document.getElementById("hint");
+
+        const confettiCanvas = document.getElementById("confettiCanvas");
+
+        function resizeConfettiCanvas() {
+            const dpr = Math.max(1, window.devicePixelRatio || 1);
+            confettiCanvas.width = window.innerWidth * dpr;
+            confettiCanvas.height = window.innerHeight * dpr;
+        }
+
+        resizeConfettiCanvas();
+        window.addEventListener("resize", resizeConfettiCanvas);
+
+        const confettiInstance = confetti.create(confettiCanvas, {
+            resize: false,
+            useWorker: true
+        });
+
+        function fullScreenConfetti() {
+            const end = Date.now() + 1600;
+            (function frame() {
+                confettiInstance({
+                    particleCount: 10,
+                    spread: 90,
+                    startVelocity: 45,
+                    origin: { x: Math.random(), y: Math.random() * 0.3 }
+                });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            })();
+
+            setTimeout(() => {
+                confettiInstance({
+                    particleCount: 300,
+                    spread: 140,
+                    startVelocity: 60,
+                    origin: { x: 0.5, y: 0.6 }
+                });
+            }, 300);
+        }
+
+        let yesScale = 1;
+        function growYes() {
+            yesScale = Math.min(2.2, yesScale + 0.1);
+            yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
+        }
+
+        function clamp(n, min, max) {
+            return Math.max(min, Math.min(max, n));
+        }
+
+        function moveNo(x, y) {
+            const z = zone.getBoundingClientRect();
+            const b = noBtn.getBoundingClientRect();
+
+            let dx = (b.left + b.width / 2) - x;
+            let dy = (b.top + b.height / 2) - y;
+            let mag = Math.hypot(dx, dy) || 1;
+            dx /= mag; dy /= mag;
+
+            let newLeft = (b.left - z.left) + dx * 150;
+            let newTop = (b.top - z.top) + dy * 150;
+
+            newLeft = clamp(newLeft, 0, z.width - b.width);
+            newTop = clamp(newTop, 0, z.height - b.height);
+
+            noBtn.style.left = newLeft + "px";
+            noBtn.style.top = newTop + "px";
+
+            growYes();
+        }
+
+        zone.addEventListener("pointermove", e => {
+            const b = noBtn.getBoundingClientRect();
+            const d = Math.hypot(
+                (b.left + b.width / 2) - e.clientX,
+                (b.top + b.height / 2) - e.clientY
+            );
+            if (d < 140) moveNo(e.clientX, e.clientY);
+        });
+
+        noBtn.addEventListener("click", e => e.preventDefault());
+
+        yesBtn.addEventListener("click", () => {
+            zone.style.display = "none";
+            hint.style.display = "none";
+            result.style.display = "block";
+            resizeConfettiCanvas();
+            fullScreenConfetti();
+        });
+    </script>
+</body>
+
+</html>
