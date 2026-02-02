@@ -51,6 +51,8 @@
             text-align: center;
             box-shadow: 0 30px 80px rgba(255, 59, 122, 0.25);
             animation: cardPop 0.6s ease;
+
+            overflow: hidden; /* ✅ FIX: keeps GIF inside card on mobile */
         }
 
         @keyframes cardPop {
@@ -145,8 +147,12 @@
         }
 
         .fireworks {
+            max-width: 100%;
             width: min(380px, 90vw);
+            height: auto;
             border-radius: 16px;
+            display: block;
+            margin: 0 auto;
         }
 
         @keyframes pop {
@@ -180,7 +186,8 @@
 
         <section class="result" id="result">
             <h2>She said YES 🎉💍</h2>
-            <img class="fireworks"
+            <img
+                class="fireworks"
                 src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
                 alt="Celebration" />
         </section>
