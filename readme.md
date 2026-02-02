@@ -71,7 +71,7 @@ You can easily customize:
 
 ---
 
-## ❤️ Made With Love
+## ❤️ Made With Love 💖 
 
 Designed to bring smiles, laughter, and a **guaranteed YES** 😉  
 Feel free to modify and share.
