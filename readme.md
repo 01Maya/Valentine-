@@ -1,4 +1,4 @@
-# 💖 Valentine Proposal Web Page
+# 💖 Valentine Proposal Web Page 💖 
 
 A fun, interactive, and romantic Valentine’s Day web page built using **HTML, CSS, and JavaScript**.  
 Designed to create a playful proposal experience with smooth animations, a shiny name effect, a teasing “No” button, and celebratory confetti when “Yes” is clicked.
