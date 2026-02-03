@@ -36,6 +36,11 @@ Designed to create a playful proposal experience with smooth animations, a shiny
 - **JavaScript (Vanilla)**
 - **Canvas Confetti Library**
 
+---
+
+
+https://01maya.github.io/love/
+
 
 ---
 
