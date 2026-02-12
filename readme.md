@@ -37,7 +37,7 @@ Designed to create a playful proposal experience with smooth animations, a shiny
 
 ---
 
-## Preview
+## 🔍Preview
 
 https://01maya.github.io/love/
 
